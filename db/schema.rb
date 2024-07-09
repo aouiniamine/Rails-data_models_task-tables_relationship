@@ -10,12 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_09_014815) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_09_032901) do
+  create_table "comments", force: :cascade do |t|
+    t.string "body"
+    t.integer "user_id", null: false
+    t.integer "pin_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pin_id"], name: "index_comments_on_pin_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "title"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pins", force: :cascade do |t|
+    t.string "img_url"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_pins_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -45,6 +63,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_014815) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "comments", "pins"
+  add_foreign_key "comments", "users"
+  add_foreign_key "pins", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "titles", "courses"
 end
